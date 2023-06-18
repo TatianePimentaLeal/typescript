@@ -1,0 +1,25 @@
+export function domInjector(seletor: string) {
+    return function(target: any, propertyKey: string){ // o propertyKey id do elemento que eu quero
+        console.log(`Modificando prototype ${target.constructor.name}
+            e adicionando getter para propriedade ${propertyKey}`);
+        
+        let elemento: HTMLElement; //ao deixar assim, setamos undefined mas poderiamos usar o HTMLElement | null: null; 
+        
+        const getter = function() {
+            if(!elemento){
+                elemento = <HTMLElement>document.querySelector(seletor);
+                console.log(`Buscando elemento do DOM com o seletor 
+                ${seletor} para injetar em ${propertyKey}`);
+            }
+
+            return elemento; 
+        }
+
+        Object.defineProperty( 
+            target, 
+            propertyKey, 
+            { get: getter }
+        );
+
+    }
+}
